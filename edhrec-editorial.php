@@ -32,7 +32,7 @@ function interpret_match($matches, $replacements, $index) {
     if (in_array('[if]', $matches)) {
         return $matches[0];
     }
-    
+
     $lword = strtolower($word);
     if (!array_key_exists($lword, $replacements)) {
         return $lword;
@@ -43,16 +43,16 @@ function interpret_match($matches, $replacements, $index) {
 function rcallback($matches) {
     include 'patterns_and_replacements.php';
     $array_length = count($matches);
-    
+
     if ($array_length == 2) {
         return interpret_match($matches, $replacements, 1);
     }
     elseif ($array_length == 3) {
-        
+
         if (str_contains($matches[0], 'ly-')) {
             return $matches[1] . ' ' . $matches[2];
         }
-        
+
         // catches colors/keywords in [deck] tag
         if (preg_match('/\d\s/i', $matches[1])) {
             return str_replace($matches[2], ucfirst($matches[2]), $matches[0]);
@@ -89,13 +89,13 @@ function rcallback($matches) {
 function filter_the_content($content) {
     // Check if we're in a single post in the loop
     // TODO: Learn what the loop is
-    
+
     if(is_singular() && in_the_loop() && is_main_query()) {
         include 'patterns_and_replacements.php';
         $new_content = preg_replace_callback($patterns, 'rcallback', $content);
         return $new_content;
     }
-    
+
     return $content;
 }
 
